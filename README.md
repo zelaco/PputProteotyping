@@ -28,7 +28,7 @@ This repository provides Python scripts for analyzing genomic and proteomic data
 ## Installation
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-username/PputProteotyping.git
+   git clone https://github.com/zelaco/PputProteotyping.git
    cd PputProteotyping
    ```
 
