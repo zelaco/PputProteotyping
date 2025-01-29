@@ -1,26 +1,38 @@
 import pandas as pd
 from Bio import SeqIO
-import argparse
 
-def retrieve_sequences(accession_file, proteome_file, output_file):
-    # Read the Excel file and get accession numbers
-    df = pd.read_excel(accession_file)
-    accession_numbers = df.iloc[:, 3].tolist()
+# Read the Excel file and get accession numbers
+df = pd.read_excel('Data/PutidaP.xlsx')
+accession_numbers = df.iloc[:, 3].tolist()
 
-    # Extract sequences from the .faa file
-    seq_dict = SeqIO.to_dict(SeqIO.parse(proteome_file, "fasta"))
-    output_sequences = [seq_dict[acc] for acc in accession_numbers if acc in seq_dict]
+print(f"Total accession numbers in Excel file: {len(accession_numbers)}")
 
-    # Save extracted sequences
-    with open(output_file, 'w') as output_handle:
-        SeqIO.write(output_sequences, output_handle, "fasta")
-    print(f"Sequences saved to {output_file}")
+# Extract sequences from the .faa file
+faa_file = 'Data/PputidaProteome.faa'  
+output_sequences = []
+seq_dict = SeqIO.to_dict(SeqIO.parse(faa_file, "fasta"))
 
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Retrieve sequences based on accession numbers.")
-    parser.add_argument("--accession-file", required=True, help="Path to the Excel file with accession numbers.")
-    parser.add_argument("--proteome-file", required=True, help="Path to the .faa proteome file.")
-    parser.add_argument("--output-file", required=True, help="Path to save the retrieved sequences.")
-    args = parser.parse_args()
+for acc in accession_numbers:
+    if acc in seq_dict:
+        output_sequences.append(seq_dict[acc])
 
-    retrieve_sequences(args.accession_file, args.proteome_file, args.output_file)
+print(f"Total sequences extracted: {len(output_sequences)}")
+
+# Save extracted sequences to a new file
+output_file = 'Outputs/proteotyping_sequences.faa'
+with open(output_file, 'w') as output_handle:
+    SeqIO.write(output_sequences, output_handle, "fasta")
+
+# Step 3: Remove duplicate sequences
+extracted_sequences = list(SeqIO.parse(output_file, "fasta"))
+unique_sequences_dict = {str(seq.seq): seq for seq in extracted_sequences}
+unique_sequences = list(unique_sequences_dict.values())
+
+print(f"Total unique sequences: {len(unique_sequences)}")
+
+# Save unique sequences to a new file
+unique_output_file = 'Outputs/unique_proteotyping_sequences.faa'
+with open(unique_output_file, 'w') as unique_output_handle:
+    SeqIO.write(unique_sequences, unique_output_handle, "fasta")
+
+print(f"Unique sequences have been saved to {unique_output_file}")

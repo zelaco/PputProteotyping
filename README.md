@@ -1,95 +1,50 @@
-# PputProteotyping: Proteomic and Genomic Tools for *Pseudomonas putida* Analysis
+# Stenotrophomonas Study
 
-This repository provides Python scripts for analyzing genomic and proteomic data of *Pseudomonas putida*, inserted in chapter IV of my doctoral thesis. It includes scripts for filtering, merging annotations, generating visualizations, and identifying biomarker candidates.
+## Code supplement
 
-## Features
-- **Genome Metrics and ANI Clustermap**:
-  - Calculate genome size, GC content, N50, and other genome metrics.
-  - Create hierarchical clustermaps from ANI matrices.
+This repository provides Python scripts for analyzing genomic and proteomic data of the *Pseudomonas putida* group, inserted in chapter IV of my doctoral thesis. It includes scripts for filtering, merging annotations, generating visualizations, and identifying biomarker candidates.
 
-- **Sequence Retrieval**:
-  - Extract protein sequences from a `.faa` file based on accession numbers.
-  - Remove duplicate sequences.
+## Script explanation
+### `genome_metrics.py`:
+* Parses multiple FASTA files in a directory.
+* Calculates genome statistics including:
+    - Genome size
+    - GC content
+    - Number of contigs
+    - N50
+    - Longest and shortest contig lengths
+    - Average contig length
+* Saves results to a CSV file.
 
-- **Annotation Filtering and Merging**:
-  - Filter EggNOG and InterPro annotation files based on accessions.
-  - Merge filtered annotations, deduplicating Gene Ontology (GO) terms.
+### `clustermap.py`:
+* Requires similarity matrix of genome-based identification data (ANI)
+* Creates clustermaps for similarity matrices (ANI)
 
-- **Visualization Tools**:
-  - Generate Venn diagrams for species comparisons.
-  - Create expression heatmaps from proteomic data.
+### `venn_diagram.py`:
+* Generate a Venn diagram for species comparisons, based on the number of peptides found.
 
-- **Biomarker Candidate Identification**:
-  - Identify species-specific unique proteins.
+### `expression_heatmap.py`:
+* Create expression heatmaps from proteomic data.
 
-- **Top GO Terms Analysis**:
-  - Analyze and visualize the top GO terms by species.
+### `sequence_retrieval.py`:
+* Extract protein sequences from a `.faa` file based on accession numbers.
+* Remove duplicate sequences.
 
-## Installation
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/zelaco/PputProteotyping.git
-   cd PputProteotyping
-   ```
+### `filter_annotations.py`:
+* Filter EggNOG and InterPro annotation files based on accessions.
 
-2. Install dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
+### `merge_annotations.py`:
+* Merge filtered annotations outputs from previous script, deduplicating Gene Ontology (GO) terms.
 
-## Usage
+### `top_goterms.py`:
+* Analyze and visualize the top GO terms by species, based on the file with the merged annotations.
 
-### 1. Genome Metrics Calculation
-Calculate genome size statistics (e.g., N50, GC content, genome size):
-```bash
-python scripts/genome_metrics.py --input-dir /path/to/fasta_files --output-file /path/to/genome_stats.csv
-```
+### `biomarker_candidates.py`:
+* Identify species-specific unique proteins.
 
-### 2. ANI Clustermap
-Generate a hierarchical clustermap from an ANI matrix:
-```bash
-python scripts/clustermap.py --matrix /path/to/ANI_matrix.xlsx --output /path/to/clustermap.png
-```
+## Contact
 
-### 3. Sequence Retrieval
-Extract sequences based on accession numbers from an `.faa` file:
-```bash
-python scripts/sequence_retrieval.py --accession-file /path/to/PutidaP.xlsx --proteome-file /path/to/PputidaProteome.faa --output-file /path/to/unique_proteotyping_sequences.faa
-```
+If you have any questions or need further information, feel free to reach out:
 
-### 4. Annotation Filtering and Merging
-#### Filter Annotations:
-Filter EggNOG and InterPro annotation files based on accession numbers:
-```bash
-python scripts/filter_annotations.py --accession-file /path/to/PutidaP.xlsx --eggnog-file /path/to/putida_eggnog.xlsx --interpro-file /path/to/putida_interpro.xlsx --eggnog-output /path/to/filtered_putida_eggnog.xlsx --interpro-output /path/to/filtered_putida_interpro.xlsx
-```
-
-#### Merge Annotations:
-Combine filtered annotations:
-```bash
-python scripts/merge_annotations.py --eggnog-file /path/to/filtered_putida_eggnog.xlsx --interpro-file /path/to/filtered_putida_interpro.xlsx --output-file /path/to/merged_putida_annotations.xlsx
-```
-
-### 5. Venn Diagram
-Generate a Venn diagram comparing species:
-```bash
-python scripts/venn_diagram.py --file-path /path/to/PutidaP.xlsx --output-file /path/to/VennDiagram.png
-```
-
-### 6. Expression Heatmap
-Generate a heatmap from expression data:
-```bash
-python scripts/expression_heatmap.py --input-file /path/to/PutidaP.xlsx --output-file /path/to/clustermap_def.png --accession-column Accession --heatmap-columns ICU_D3_79 ICU_D3_93 UCE_D3_119 UCE_D3_129 UCE_D4_115
-```
-
-### 7. Biomarker Candidate Identification
-Identify species-specific biomarker candidates:
-```bash
-python scripts/biomarker_candidates.py --species-file /path/to/PutidaP.xlsx --annotations-file /path/to/merged_putida_annotations.xlsx --output-file /path/to/biomarker_candidates_all.xlsx
-```
-
-### 8. Top GO Terms Analysis
-Analyze and visualize the top GO terms by species:
-```bash
-python scripts/enrichment_goterms.py --species-file /path/to/PutidaP.xlsx --annotations-file /path/to/merged_putida_annotations.xlsx --output-dir /path/to/outputs
-```
+    Email: [j.serpa@uib.es]
+    GitHub: [github.com/zelaco]

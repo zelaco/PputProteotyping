@@ -1,32 +1,40 @@
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
-import argparse
+import numpy as np
 
-def generate_heatmap(input_file, output_file, accession_column, heatmap_columns):
-    data = pd.read_excel(input_file)
-    heatmap_data = data[[accession_column] + heatmap_columns].set_index(accession_column)
-    heatmap_data = heatmap_data[(heatmap_data != 0).all(axis=1)].dropna()
+# Load the data from your Excel file
+data = pd.read_excel("Data/PutidaP.xlsx")
 
-    sns.clustermap(
-        heatmap_data,
-        cmap='magma_r',
-        metric='euclidean',
-        method='average',
-        figsize=(10, 12),
-        yticklabels=False,
-        row_cluster=False,
-        dendrogram_ratio=(.1, .1),
-        cbar_pos=(0, .2, .03, .4)
-    )
+# Extract the Accession column and heatmap data (columns U to Y)
+accession_column = 'Accession'  
+heatmap_columns = ['ICU_D3_79', 'ICU_D3_93', 'UCE_D3_119', 'UCE_D3_129', 'UCE_D4_115']  
 
-    plt.savefig(output_file, dpi=300, bbox_inches='tight')
-    print(f"Heatmap saved to {output_file}")
+# Subset the data
+heatmap_data = data[[accession_column] + heatmap_columns].set_index(accession_column)
 
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Generate an expression heatmap.")
-    parser.add_argument("--input-file", required=True, help="Path to the input Excel file.")
-    parser.add_argument("--output-file", required=True, help="Path to save the heatmap.")
-    parser.add_argument("--accession-column", default="Accession", help="Name of the accession column.")
-    parser.add_argument("--heatmap-columns", nargs='+', required=True, help="List of columns to include in the heatmap.")
- 
+# Remove rows where any value in heatmap_columns is zero or NaN
+heatmap_data = heatmap_data[(heatmap_data != 0).all(axis=1)].dropna(subset=heatmap_columns)
+
+# Data normalization
+# heatmap_data = heatmap_data.apply(lambda x: (x - x.min()) / (x.max() - x.min()), axis=0)
+
+# Plot the clustermap
+sns.clustermap(
+    heatmap_data,
+    cmap='magma_r',       # Choose a colormap
+    metric='euclidean',   # Distance metric for clustering
+    method='average',     # Clustering method
+    figsize=(10, 12),      # Adjust the size of the plot
+    yticklabels=False,     # Remove y-axis labels
+    row_cluster=False,    # Disable row clustering
+    dendrogram_ratio=(.1, .1), # Adjust the size of the dendrogram
+    cbar_pos=(0, .2, .03, .4)     # Position of the colorbar
+)
+
+# Save the plot
+plt.savefig('Outputs/clustermap_def.png', dpi=300, bbox_inches='tight')
+
+# Count the number of rows after filtering
+#print(f"Number of genes included in the heatmap: {heatmap_data.shape[0]}")
+

@@ -49,7 +49,7 @@ columns_to_drop = ['GOs', 'GO Names_EggNOG', 'GO IDs', 'GO Names_InterPro']
 merged_df = merged_df.drop(columns=[col for col in columns_to_drop if col in merged_df.columns])
 
 # Save the merged and cleaned DataFrame to an Excel file
-merged_df.to_excel('Data/merged_aer_annotations.xlsx', index=False)
+merged_df.to_excel('Data/merged_annotations.xlsx', index=False)
 
 
 

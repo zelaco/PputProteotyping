@@ -1,38 +1,38 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib_venn import venn3
-import argparse
 
-def generate_venn(file_path, output_file):
-    species_df = pd.read_excel(file_path, sheet_name='Species')
-    species_names = species_df.columns.tolist()
+# Load the Excel file with accession numbers
+file_path = 'Data/PutidaP.xlsx' 
 
-    if len(species_names) != 3:
-        raise ValueError("This script supports exactly 3 species for Venn diagrams.")
+# Read the 'Species' sheet into a DataFrame
+species_df = pd.read_excel(file_path, sheet_name='Species')
 
-    species_sets = {
-        species: set(species_df[species].dropna())
-        for species in species_names
-    }
+# Get the species names from the columns
+species_names = species_df.columns.tolist()
 
-    plt.figure(figsize=(10, 6))
-    venn = venn3(
-        [species_sets[species] for species in species_names],
-        set_labels=species_names
-    )
+# Build sets of proteins for each species
+species_sets = {}
+for species in species_names:
+    # Get the list of proteins for this species, dropping any NaNs
+    proteins = species_df[species].dropna().tolist()
+    species_sets[species] = set(proteins)
 
-    for text in venn.set_labels:
-        if text:
-            text.set_fontsize(16)
-            text.set_style('italic')
+# Assign species names to variables for clarity
+species1, species2, species3 = species_names
 
-    plt.savefig(output_file, dpi=300, bbox_inches='tight')
-    print(f"Venn diagram saved to {output_file}")
+# Plot the Venn diagram
+plt.figure(figsize=(10, 6))
+venn = venn3(
+    [species_sets[species1], species_sets[species2], species_sets[species3]],
+    set_labels=(species1, species2, species3)
+)
 
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Generate a Venn diagram for three species.")
-    parser.add_argument("--file-path", required=True, help="Path to the Excel file containing species data.")
-    parser.add_argument("--output-file", required=True, help="Path to save the Venn diagram.")
-    args = parser.parse_args()
+# Customize the Venn diagram labels
+for text in venn.set_labels:
+    if text:
+        text.set_fontsize(16)
+        text.set_style('italic')
 
-    generate_venn(args.file_path, args.output_file)
+# Save and display the Venn diagram
+plt.savefig('Outputs/VennDiagram.png', dpi=300, bbox_inches='tight')
