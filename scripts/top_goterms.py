@@ -83,5 +83,4 @@ for species in species_df.columns:
 
     plt.tight_layout()
     plt.savefig(f'Outputs/GOTERMS_{species}.png', dpi=300)
-    plt.show()
 

@@ -16,9 +16,6 @@ heatmap_data = data[[accession_column] + heatmap_columns].set_index(accession_co
 # Remove rows where any value in heatmap_columns is zero or NaN
 heatmap_data = heatmap_data[(heatmap_data != 0).all(axis=1)].dropna(subset=heatmap_columns)
 
-# Data normalization
-# heatmap_data = heatmap_data.apply(lambda x: (x - x.min()) / (x.max() - x.min()), axis=0)
-
 # Plot the clustermap
 sns.clustermap(
     heatmap_data,
@@ -34,7 +31,3 @@ sns.clustermap(
 
 # Save the plot
 plt.savefig('Outputs/clustermap_def.png', dpi=300, bbox_inches='tight')
-
-# Count the number of rows after filtering
-#print(f"Number of genes included in the heatmap: {heatmap_data.shape[0]}")
-

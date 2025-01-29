@@ -23,7 +23,7 @@ output_file = 'Outputs/proteotyping_sequences.faa'
 with open(output_file, 'w') as output_handle:
     SeqIO.write(output_sequences, output_handle, "fasta")
 
-# Step 3: Remove duplicate sequences
+# Remove duplicate sequences
 extracted_sequences = list(SeqIO.parse(output_file, "fasta"))
 unique_sequences_dict = {str(seq.seq): seq for seq in extracted_sequences}
 unique_sequences = list(unique_sequences_dict.values())

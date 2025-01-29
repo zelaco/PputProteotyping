@@ -1,4 +1,4 @@
-# Stenotrophomonas Study
+# *Pseudomonas putida* group Proteotyping
 
 ## Code supplement
 
